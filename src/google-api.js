@@ -3,7 +3,7 @@ var scope = ['https://www.googleapis.com/auth/calendar'];
 
 /**
 * Fonction d'authentification à l'api google.
-* Renvoie lorsque l'utilisateur est connecté.
+* Le résultat de la connection est renvoyé en callback. 
 * @param : cb
 */
 function authentication(cb) {
@@ -34,10 +34,14 @@ function queryCalendars(cb) {
 }
 
 /**
+* Documentation relative aux queries
 * https://developers.google.com/google-apps/calendar/v3/reference/events/list#parameters
-*
-*
-*
+* Charge l'ensemble des évenement d'un calendrier.
+* Un certain nombre de prédicat sont passés en paramètre.
+* Les évenements sont renvoyés dans un callback.
+* @param calendarId
+* @param params
+* @param cb
 */
 function queryEventsFromCalendar(calendarId, params, cb) {
   gapi.client.load('calendar', 'v3', function() {
@@ -46,7 +50,8 @@ function queryEventsFromCalendar(calendarId, params, cb) {
       'calendarId': calendarId,
       'showDeleted': params.showDeleted || false,
       'maxResults': params.maxResults || 10,
-      //'orderBy': params.startTime || 'startTime'
+      // peut être du type startTime ou updated
+      'orderBy': params.startTime || 'startTime'
     };
     var req = gapi.client.calendar.events.list(queryParams);
     req.execute(function(result) {
@@ -57,6 +62,16 @@ function queryEventsFromCalendar(calendarId, params, cb) {
   });
 }
 
+/**
+* https://developers.google.com/google-apps/calendar/v3/reference/events/insert#request-body
+* Créer un évenement sur un calendrier spécifique.
+* Au cas ou le calendrier et ou les attributs de l'evenement ne sont pas
+* fournis, on crée un event générique sur le calendrier principal du compte.
+* Une fois l'event crée, on le renvoie dans un callback.
+* @param calendarId
+* @param eventAttributes
+* @param cb
+*/
 function createEvent(calendarId, eventAttributes, cb) {
   var random = Math.random();
   var event = {
@@ -74,6 +89,8 @@ function createEvent(calendarId, eventAttributes, cb) {
       'dateTime': !eventAttributes.endDateTime ?
           '2016-04-25T17:00:00-07:00' : eventAttributes.endDateTime
     },
+    // Les utilisateurs qui vont êtres notifiés qu'on les a invités
+    // à ce nouvel évenement.
     'attendees' : eventAttributes.attendees
   };
   var request = gapi.client.calendar.events.insert({
