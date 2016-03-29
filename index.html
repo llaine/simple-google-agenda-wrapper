@@ -5,7 +5,24 @@
     <title>Test</title>
 </head>
 <body>
+  <div>
+    Créer un évenement :
+    <form id="addEvent">
+      Calendrier :
+      <select name="calendar" id="calendarList"></select> <br />
+      Description :
+      <input type="text" name="description" value="Event test"> <br />
+      Date de début :
+      <input type="text" name="date_debut" value="2016-04-01T09:00:00-07:00">
+      Date de fin :
+      <input type="text" name="date_fin" value="2016-04-02T09:00:00-07:00"> <br />
+      Envoyer des invitations : (séparer par une virgule les adresses) <br>
+      <textarea name="attendees" rows="8" cols="40"></textarea>
+      <button type="submit">Créer</button>
+    </form>
+  </div>
   <script src="build/bundle.js"></script>
+  <script src="http://code.jquery.com/jquery-2.2.2.js" integrity="sha256-4/zUCqiq0kqxhZIyp4G0Gk+AOtCJsY1TA00k5ClsZYE=" crossorigin="anonymous"></script>
   <script src="https://apis.google.com/js/client.js"></script>
 </body>
 </html>

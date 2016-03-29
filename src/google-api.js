@@ -39,16 +39,14 @@ function queryCalendars(cb) {
 *
 *
 */
-function queryEventsFromCalendar(calendarId, cb) {
+function queryEventsFromCalendar(calendarId, params, cb) {
   gapi.client.load('calendar', 'v3', function() {
     var queryParams = {
       'timeMin': (new Date()).toISOString(),
       'calendarId': calendarId,
-      // On peut récupérer les deleted.
-      'showDeleted': false,
-      //'singleEvents': true,
-      //'maxResults': 10,
-      //'orderBy': 'startTime'
+      'showDeleted': params.showDeleted || false,
+      'maxResults': params.maxResults || 10,
+      //'orderBy': params.startTime || 'startTime'
     };
     var req = gapi.client.calendar.events.list(queryParams);
     req.execute(function(result) {
@@ -59,12 +57,38 @@ function queryEventsFromCalendar(calendarId, cb) {
   });
 }
 
-function createEvent() {
-  
+function createEvent(calendarId, eventAttributes, cb) {
+  var random = Math.random();
+  var event = {
+    'summary': !eventAttributes.summary ?
+        `Event N° ${random}` : eventAttributes.summary,
+    'location': !eventAttributes.localisation ?
+        '51 rue Saint François, 33000 Bordeaux, France' : eventAttributes.localisation,
+    'description': !eventAttributes.description ?
+        'Je suis un évenement aléatoire crée depuis une appli web!.' : eventAttributes.description,
+    'start': {
+      'dateTime': !eventAttributes.startDateTime ?
+          '2016-04-25T09:00:00-07:00' : eventAttributes.startDateTime
+    },
+    'end': {
+      'dateTime': !eventAttributes.endDateTime ?
+          '2016-04-25T17:00:00-07:00' : eventAttributes.endDateTime
+    },
+    'attendees' : eventAttributes.attendees
+  };
+  var request = gapi.client.calendar.events.insert({
+    'calendarId': !calendarId ? 'primary' : calendarId,
+    'resource': event
+  });
+
+  request.execute(function(event) {
+    cb(event)
+  });
 }
 
 module.exports = {
   authentication:authentication,
   queryCalendars:queryCalendars,
-  queryEventsFromCalendar:queryEventsFromCalendar
+  queryEventsFromCalendar:queryEventsFromCalendar,
+  createEvent:createEvent
 }
