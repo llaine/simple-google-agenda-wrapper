@@ -49,9 +49,9 @@ function queryEventsFromCalendar(calendarId, params, cb) {
       'timeMin': (new Date()).toISOString(),
       'calendarId': calendarId,
       'showDeleted': params.showDeleted || false,
-      'maxResults': params.maxResults || 10,
+      'maxResults': params.maxResults || 10
       // peut être du type startTime ou updated
-      //'orderBy': params.startTime || 'startTime'
+      //'orderBy':'startTime'
     };
     var req = gapi.client.calendar.events.list(queryParams);
     req.execute(function(result) {
@@ -91,11 +91,12 @@ function createEvent(calendarId, eventAttributes, cb) {
     },
     // Les utilisateurs qui vont êtres notifiés qu'on les a invités
     // à ce nouvel évenement.
-    'attendees' : eventAttributes.attendees
+    'attendees' : eventAttributes.attendees,
   };
   var request = gapi.client.calendar.events.insert({
     'calendarId': !calendarId ? 'primary' : calendarId,
-    'resource': event
+    'resource': event,
+    'sendNotifications': true
   });
 
   request.execute(function(event) {
