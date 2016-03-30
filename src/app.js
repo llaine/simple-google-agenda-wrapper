@@ -32,7 +32,8 @@ onDomReady(function() {
       calendarList.append(createCalendarItem(calendar));
       var queryParams = {
         showDeleted: true,
-        maxResults: 5
+        maxResults: 5,
+        orderBy: 'startTime'
       };
 
       Api.queryEventsFromCalendar(calendar.id, queryParams, function(events) {

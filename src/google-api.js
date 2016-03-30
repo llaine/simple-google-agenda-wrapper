@@ -3,7 +3,7 @@ var scope = ['https://www.googleapis.com/auth/calendar'];
 
 /**
 * Fonction d'authentification à l'api google.
-* Le résultat de la connection est renvoyé en callback. 
+* Le résultat de la connection est renvoyé en callback.
 * @param : cb
 */
 function authentication(cb) {
@@ -51,7 +51,7 @@ function queryEventsFromCalendar(calendarId, params, cb) {
       'showDeleted': params.showDeleted || false,
       'maxResults': params.maxResults || 10,
       // peut être du type startTime ou updated
-      'orderBy': params.startTime || 'startTime'
+      //'orderBy': params.startTime || 'startTime'
     };
     var req = gapi.client.calendar.events.list(queryParams);
     req.execute(function(result) {
