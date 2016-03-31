@@ -3,7 +3,6 @@
 Pure VanillaJS wrapper for Google Agenda API calls.
 
 
-# TODO
 
 ## Exploration des possibilités de requêtes.
 
